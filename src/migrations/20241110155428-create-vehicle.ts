@@ -11,14 +11,17 @@ export default {
     plate:{
         type: new DataTypes.STRING(9),
         allowNull: false,
+        unique:true,
     },
     chassi:{
         type: new DataTypes.STRING(17),
         allowNull:false,
+        unique:true,
     },
     renavam: {
       type: DataTypes.STRING(11),
       allowNull: false,
+      unique:true,
   },
     model: {
         type: new DataTypes.STRING(30),

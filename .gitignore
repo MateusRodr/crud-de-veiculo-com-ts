@@ -1,0 +1,20 @@
+# Ignorar a pasta coverage
+coverage/
+
+# Ignorar arquivos de configuração de ambiente
+.env
+
+# Ignorar a pasta node_modules
+node_modules/
+
+# Ignorar logs
+*.log
+
+# Ignorar relatórios de teste
+jest-relatórios
+
+# Ignorar arquivos de build
+dist/
+
+# Ignorar arquivo de documentação
+documentação.txt

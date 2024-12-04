@@ -1,57 +1,45 @@
 import { RequestHandler } from 'express';
-import vehicle from '../models/vehicle';
-
+import vehicleService from '../service/vehicleService';
+import { z } from 'zod'
 
 export const getAllVehicle: RequestHandler = async (req, res) => {
     try {
-        const vehicles = await vehicle.findAll();
+        const vehicles = await vehicleService.getAllVehicles();
         res.json(vehicles);
-    } catch (e) {
-        res.status(500).json({ error: 'Vehicle not found' });
+    } catch (e: any) {
+        res.status(500).json({ error: e.message });
     }
 };
 
 export const createVehicle: RequestHandler = async (req, res) => {
     try {
-        const { plate, chassi, renavam, model, brand, year } = req.body;
-        const newVehicle = await vehicle.create({ plate, chassi, renavam, model, brand, year });
+        const newVehicle = await vehicleService.createVehicle(req.body);
         res.status(201).json(newVehicle);
-    } catch (e) {
-        res.status(500).json({ error: 'Error creating vehicle' });
+    } catch (e: any) {
+        if (e instanceof z.ZodError) {
+            res.status(400).json({ error: 'Validation error', details: e.errors });
+        } else {
+            res.status(409).json({ error: e.message });
+        }
     }
 };
 
 export const updateVehicle: RequestHandler = async (req, res) => {
     try {
         const { id } = req.params;
-        const { plate, chassi, renavam, model, brand, year } = req.body;
-        const VehicleUp = await vehicle.findByPk(id);
-
-        if (!VehicleUp) {
-             res.status(404).json({ error: 'Vehicle not found' });
-             return;
-        }
-
-        await VehicleUp.update({ plate, chassi, renavam, model, brand, year });
-        res.json(VehicleUp);
-    } catch (e) {
-        res.status(500).json({ error: 'Error updating vehicle' });
+        const updatedVehicle = await vehicleService.updateVehicle(id, req.body);
+        res.json(updatedVehicle);
+    } catch (e: any) {
+        res.status(404).json({ error: e.message });
     }
 };
 
 export const deleteVehicle: RequestHandler = async (req, res) => {
     try {
         const { id } = req.params;
-        const vehicles = await vehicle.findByPk(id);
-
-        if (!vehicles) {
-             res.status(404).json({ error: 'Vehicle not found' });
-             return;
-        }
-
-        await vehicles.destroy();
+        await vehicleService.deleteVehicle(id);
         res.status(204).send();
-    } catch (e) {
-        res.status(500).json({ error: 'Error deleting vehicle' });
+    } catch (e: any) {
+        res.status(404).json({ error: e.message });
     }
 };

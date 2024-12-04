@@ -19,16 +19,19 @@ vehicle.init(
             primaryKey: true,
         },
         plate:{
-            type: new DataTypes.STRING(9),
+            type: new DataTypes.STRING(7),
             allowNull: false,
+            unique:true,
         },
         chassi:{
             type: new DataTypes.STRING(17),
             allowNull:false,
+            unique:true,
         },
         renavam: {
             type: DataTypes.STRING(11),
             allowNull: false,
+            unique:true,
         },
         
         model: {
